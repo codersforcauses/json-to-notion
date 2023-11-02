@@ -194,6 +194,12 @@ const createPages = async (pagesToCreate: TApplicants) => {
                 color: "orange",
               },
             },
+            Preference: {
+              select: {
+                name: "normal",
+                color: "brown",
+              },
+            },
             Discord: {
               rich_text: [
                 {
@@ -399,7 +405,7 @@ const createPages = async (pagesToCreate: TApplicants) => {
               },
             ),
             paragraph(""),
-            paragraph("Internships or industry experience?: "),
+            paragraph("Internships or industry experience?: ", { bold: true }),
             paragraph(""),
             paragraph("Personal / Side Projects: ", { bold: true }),
             paragraph(""),
@@ -559,7 +565,9 @@ const createPages = async (pagesToCreate: TApplicants) => {
 
             heading_2("Introduce the projects"),
             ...projectBlocks,
-            paragraph("PROJECT PREFERENCE: ", { bold: true }),
+            paragraph("PROJECT PREFERENCE or Beginner Project: ", {
+              bold: true,
+            }),
             bullet("\n"),
           ],
         });
