@@ -64,8 +64,10 @@ normalApplicants.forEach((applicant) => {
     if (inBoth.has(applicant.Email)) {
         reason = `Why they want to be in the beginner projects:\n\n ${inBoth.get(applicant.Email)}
         \n\nWhy they want to be in the ${projectConfig.season} projects:\n\n${reason}`;
+        var _applicant_: Applicant = {...rest, Preference: "both", Reason: reason};
+    } else {
+        var _applicant_: Applicant = {...rest, Preference: "normal", Reason: reason};
     }
-    const _applicant_: Applicant = {...rest, Preference: "both", Reason: reason};
     merged.push(_applicant_);
 })
 
