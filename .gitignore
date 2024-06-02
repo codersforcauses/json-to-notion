@@ -24,7 +24,7 @@ dist-ssr
 *.sw?
 
 # DO NOT UPLOAD ANY DATA
-applicants*
+*applicants*
 *.csv
 *.xlsx
 
