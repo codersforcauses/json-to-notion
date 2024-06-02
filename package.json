@@ -4,8 +4,9 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "build": "cp .env dist/.env && tsc --build",
-        "exe": "pnpm build && node dist/main.js"
+        "build": "touch src/applicants.json && tsc --build && cp .env dist/.env",
+        "exe": "pnpm build && node dist/main.js",
+        "merge": "node dist/merge-applicants.js"
     },
     "devDependencies": {
         "prettier": "3.0.3",

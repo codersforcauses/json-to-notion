@@ -19,7 +19,15 @@ In your Notion workspace, add the integration to your target database. Make sure
 
 ![Notion API Integration Screenshot](add_connections.png)
 
-## Step 4: Install Packages
+## Step 4: Add Environment Variables
+
+Rename the `.env.example` file to `.env` and enter your Notion API key and database key.
+
+## Step 5: Configure projectConfig.ts
+
+Open the `projectConfig.ts` file and set the project season and project info according to your project requirements.
+
+## Step 6: Install Packages
 
 Use the following command to install the necessary packages for your TypeScript script:
 
@@ -27,35 +35,35 @@ Use the following command to install the necessary packages for your TypeScript 
 pnpm install
 ```
 
-## Step 5: Download XLSX File from Google Docs
+## Step 7: Download XLSX Files from Google Docs
 
-Download the XLSX file from your Google Docs, which contains the data you want to transfer to Notion.
+Download the XLSX files from your Google Docs, which contains the data you want to transfer to Notion.
 
-## Step 6: Clean the XLSX File
+## Step 8: Clean the XLSX Files
 
-Perform any necessary data cleaning or formatting on the downloaded XLSX file to ensure that it's ready for conversion to JSON.
+Perform any necessary data cleaning or formatting on the downloaded XLSX files to ensure that it's ready for conversion to JSON.
 
-## Step 7: Convert XLSX to CSV
+## Step 9: Convert XLSX to CSV
 
-Use your preferred method or library to convert the cleaned XLSX file to a CSV file.
+Use your preferred method or library to convert the cleaned XLSX files to CSV files.
 
-## Step 8: Convert CSV to JSON
+## Step 10: Convert CSV to JSON
 
-Use an online service or a library (e.g., [convertcsv.com](https://www.convertcsv.com/csv-to-json.htm)) to convert the CSV file to a JSON file. Name the JSON file starting with "applicants."
+Use an online service or a library (e.g., [convertcsv.com](https://www.convertcsv.com/csv-to-json.htm)) to convert the CSV files to JSON files. Name the JSON files as `normal-applicants.json` and `beginner-applicants.json`.
 
-## Step 9: Place JSON File in src Folder
+## Step 11: Place JSON File in src Folder
 
-Move the generated JSON file to the `src` folder in your project directory.
+Move the generated JSON files to the `src` folder in your project directory.
 
-## Step 10: Configure projectConfig.ts
+## Step 12: Merge JSON files
 
-Open the `projectConfig.ts` file and set the project season and project info according to your project requirements.
+Run the following command to merge the two JSON files into a single file called `applicants.json`:
 
-## Step 11: Update main.ts
+```bash
+pnpm merge
+```
 
-In the `main.ts` file, locate lines 38 and 52 and change the project season as needed.
-
-## Step 12: Run the Script
+## Step 13: Run the Script
 
 Run the script using the following command:
 

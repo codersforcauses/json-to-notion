@@ -4,7 +4,7 @@ import { z } from "zod";
 import { env } from "./env.js";
 import projectConfig from "./projectConfig.js";
 
-import applicants from "./applicants-summer2023.json" assert { type: "json" };
+import applicants from "./applicants.json" assert { type: "json" };
 import {
   bullet,
   bulletChildren,
@@ -22,38 +22,41 @@ const notion = new Client({ auth: env.NOTION_KEY });
 const databaseId = env.NOTION_DATABASE_ID;
 
 console.log("Running Notion API script");
-
+console.log(databaseId);
 console.log(projectConfig);
 
 const Applicant = z
   .object({
     Timestamp: z.string(),
     "Full Name": z.string(),
+    Pronouns: z.string(),
     Email: z.string(),
     "Discord Username": z.string(),
     "GitHub Username": z.string(),
     "UWA Student Number": z.string(),
     "Describe your technical experience": z.string(),
-    // Change season here
-    "Why do you want to be part of the Summer projects?": z.string(),
+    Reason: z.string(),
     "Are you able to attend the project sessions in person?": z.string(),
     "What is your rough weekly availability?": z.string(),
     "Anything else that you'd like us to know?": z.string(),
+    Preference: z.string(),
   })
   .transform((applicant) => ({
     timestamp: applicant.Timestamp,
     name: applicant["Full Name"],
+    pronouns: applicant.Pronouns,
     email: applicant.Email,
     discord: applicant["Discord Username"],
     github: applicant["GitHub Username"],
     studentNumber: applicant["UWA Student Number"],
     techExp: applicant["Describe your technical experience"],
     // Change season here
-    reason: applicant["Why do you want to be part of the Summer projects?"],
+    reason: applicant.Reason,
     canAttend:
       applicant["Are you able to attend the project sessions in person?"],
     weekly: applicant["What is your rough weekly availability?"],
     anythingElse: applicant["Anything else that you'd like us to know?"],
+    preference: applicant.Preference,
   }));
 
 const Applicants = z.array(Applicant);
@@ -100,6 +103,47 @@ const getColourFromHours = (hours: string) => {
       return "purple";
   }
 };
+
+const getGender = (pronouns: string): { name: string; color: "purple" | "orange" | "green"; } => {
+  if (pronouns.toLowerCase() === "she/her") {
+    return {name: "Female", color: "purple"};
+  } else if (pronouns.toLowerCase() === "he/him") {
+    return {name: "Male", color: "orange"};
+  } else {
+    return {name: "Other", color: "green"};
+  }
+};
+
+const getColourFromPreference = (preference: string) => {
+  switch (preference) {
+    case "both":
+      return "red";
+    case "beginner":
+      return "yellow";
+    case "normal":
+      return "brown";
+  }
+};
+
+const getPreferenceDescription = (preference: string) => {
+  switch (preference) {
+    case "beginner":
+      return "beginner project";
+    case "normal":
+      return `${projectConfig.season} projects`;
+    case "both":
+      return `${projectConfig.season} projects/beginner project`;
+  }
+}
+
+const getStatus = (hours: string): { name: string; color: "gray" | "orange"; } => {
+  if (hours === "1-3 Hours" || hours === "3-5 Hours") {
+    // Automatically reject applicants with less than 5 hours of weekly availability
+    return {name: "Rejected (no interview given)", color: "gray"}
+  } else {
+    return {name: "To Send Confirmation", color: "orange"}
+  }
+}
 
 const projectBlocks: BlockObjectRequest[] = [];
 
@@ -189,15 +233,12 @@ const createPages = async (pagesToCreate: TApplicants) => {
               email: applicant.email,
             },
             Status: {
-              select: {
-                name: "To Send Confirmation",
-                color: "orange",
-              },
+              select: getStatus(applicant.weekly),
             },
             Preference: {
               select: {
-                name: "normal",
-                color: "brown",
+                name: applicant.preference,
+                color: getColourFromPreference(applicant.preference),
               },
             },
             Discord: {
@@ -233,6 +274,9 @@ const createPages = async (pagesToCreate: TApplicants) => {
                 },
               ],
             },
+            "Gender": {
+              select: getGender(applicant.pronouns),
+            }
           },
           children: [
             paragraph(
@@ -272,7 +316,7 @@ const createPages = async (pagesToCreate: TApplicants) => {
             }),
             paragraph(`${applicant.techExp}\n`),
             paragraph(
-              `Why do you want to be part of the ${projectConfig.season} projects?`,
+              `Why do you want to be part of the ${getPreferenceDescription(applicant.preference)}?`,
               {
                 bold: true,
                 underline: true,
