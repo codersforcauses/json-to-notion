@@ -73,4 +73,8 @@ pnpm exe
 
 This will execute your TypeScript script and transfer the data from the JSON file to the configured Notion database.
 
+## Step 14: Transfer to CFC Workspace
+
+If the notion database is in a workspace other than the CFC workspace, you can copy-paste it into the CFC workspace. In particular, select the database, press ``Ctrl+C``, switch to the appropriate place in the CFC workspace, and then press ``Ctrl+V``.
+
 EZ
