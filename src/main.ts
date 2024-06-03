@@ -201,6 +201,8 @@ projectConfig.projects.forEach((project) => {
   projectBlocks.push(techStack);
   projectBlocks.push(paragraph(""));
 });
+projectBlocks.push(heading_2("Introduce the beginner projects"))
+projectConfig.beginnerProjectInfo.forEach((info) => projectBlocks.push(bullet(info)));
 
 //*========================================================================
 // Requests
@@ -608,11 +610,6 @@ const createPages = async (pagesToCreate: TApplicants) => {
             divider(),
 
             heading_2("Introduce the projects"),
-            ...projectBlocks,
-            paragraph("PROJECT PREFERENCE or Beginner Project: ", {
-              bold: true,
-            }),
-            bullet("\n"),
           ],
         });
       }),
@@ -630,6 +627,11 @@ const createPages = async (pagesToCreate: TApplicants) => {
         return notion.blocks.children.append({
           block_id: response.id,
           children: [
+            ...projectBlocks,
+            paragraph("\nPROJECT PREFERENCE or Beginner Project: ", {
+              bold: true,
+            }),
+            bullet("\n"),
             divider(),
 
             heading_2("Make sure candidate knows:"),

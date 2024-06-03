@@ -9,6 +9,7 @@ interface Project {
 interface ProjectConfig {
   season: "Winter" | "Summer";
   projects: Project[];
+  beginnerProjectInfo: string[];
 }
 
 const project1: Project = {
@@ -30,6 +31,7 @@ const project2: Project = {
 const projectConfig: ProjectConfig = {
   season: "Summer",
   projects: [project1, project2],
+  beginnerProjectInfo: ["Thing that will happen 1", "Thing that will happen 2"]
 };
 
 export default projectConfig;
