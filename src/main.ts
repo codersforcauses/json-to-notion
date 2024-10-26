@@ -5,6 +5,7 @@ import { env } from "./env.js";
 import projectConfig from "./projectConfig.js";
 
 import applicants from "./applicants.json" assert { type: "json" };
+import pastApplicants from "./past-applicants.json" assert { type: "json" };
 import {
   bullet,
   bulletChildren,
@@ -62,6 +63,7 @@ const Applicant = z
 const Applicants = z.array(Applicant);
 
 type TApplicants = z.infer<typeof Applicants>;
+type TApplicant = z.infer<typeof Applicant>;
 
 const main = async () => {
   const pagesToCreate = Applicants.parse(applicants);
@@ -141,8 +143,20 @@ const getStatus = (hours: string): { name: string; color: "gray" | "orange"; } =
     // Automatically reject applicants with less than 5 hours of weekly availability
     return {name: "Rejected (no interview given)", color: "gray"}
   } else {
-    return {name: "To Send Confirmation", color: "orange"}
+    return {name: "To Send Email", color: "orange"}
   }
+}
+
+function getPastParticipationStatus(applicant: TApplicant): {name : string, color: "yellow" | "orange" | "red" | "green" | "blue"} {
+  for (const pastApplicant of pastApplicants) {
+    if (pastApplicant.Email === applicant.email || pastApplicant.Discord === applicant.discord || (pastApplicant["Student No."] === applicant.studentNumber && !isNaN(Number(applicant.studentNumber)))) {
+      if (pastApplicant.Status === "No Interview Scheduled") return {name: "Applied but did not schedule interview", color: "yellow"};
+      else if (pastApplicant.Status === "No show") return {name: "Applied but no-showed interview", color: "red"};
+      else if (pastApplicant["Project Preference"] === "") return {name: "Applied but was rejected", color: "orange"};
+      else return {name: `Applied and was accepted to ${pastApplicant["Project Preference"]}`, color: "green"};
+    }
+  }
+  return {name: "Did not apply last time", color: "blue"};
 }
 
 const projectBlocks: BlockObjectRequest[] = [];
@@ -201,6 +215,8 @@ projectConfig.projects.forEach((project) => {
   projectBlocks.push(techStack);
   projectBlocks.push(paragraph(""));
 });
+projectBlocks.push(heading_2("Introduce the beginner projects"))
+projectConfig.beginnerProjectInfo.forEach((info) => projectBlocks.push(bullet(info)));
 
 //*========================================================================
 // Requests
@@ -222,7 +238,7 @@ const createPages = async (pagesToCreate: TApplicants) => {
     const applicantsTest = pagesToCreate.slice(i, i + BATCH_SIZE);
     const responses = await Promise.all(
       applicantsTest.map(async (applicant) => {
-        await sleep(1000);
+        await sleep(2000);
         return notion.pages.create({
           parent: { database_id: databaseId },
           properties: {
@@ -274,6 +290,9 @@ const createPages = async (pagesToCreate: TApplicants) => {
                 },
               ],
             },
+            "Previous Project Participation": {
+              select: getPastParticipationStatus(applicant),
+            },
             "Gender": {
               select: getGender(applicant.pronouns),
             }
@@ -314,7 +333,8 @@ const createPages = async (pagesToCreate: TApplicants) => {
               bold: true,
               underline: true,
             }),
-            paragraph(`${applicant.techExp}\n`),
+            paragraph(`${applicant.techExp.slice(0,1999)}`),
+            paragraph(`${applicant.techExp.slice(1999)}\n`),
             paragraph(
               `Why do you want to be part of the ${getPreferenceDescription(applicant.preference)}?`,
               {
@@ -322,7 +342,8 @@ const createPages = async (pagesToCreate: TApplicants) => {
                 underline: true,
               },
             ),
-            paragraph(`${applicant.reason}\n`),
+            paragraph(`${applicant.reason.slice(0,1999)}`),
+            paragraph(`${applicant.reason.slice(1999)}\n`),
             paragraph("Anything else that you’d like us to know?", {
               bold: true,
               underline: true,
@@ -448,7 +469,7 @@ const createPages = async (pagesToCreate: TApplicants) => {
                 italic: true,
               },
             ),
-            paragraph(""),
+            paragraph(applicant.preference === "beginner" ? "NOTE: this person applied only for the beginner projects, so some of the questions below may be irrelevant." : "", { underline: true, italic: true,  }),
             paragraph("Internships or industry experience?: ", { bold: true }),
             paragraph(""),
             paragraph("Personal / Side Projects: ", { bold: true }),
@@ -608,28 +629,28 @@ const createPages = async (pagesToCreate: TApplicants) => {
             divider(),
 
             heading_2("Introduce the projects"),
-            ...projectBlocks,
-            paragraph("PROJECT PREFERENCE or Beginner Project: ", {
-              bold: true,
-            }),
-            bullet("\n"),
           ],
         });
       }),
     );
     console.log("Created pages");
 
-    console.log("Let Notion settle for 2 seconds");
-    await sleep(2000);
+    console.log("Let Notion settle for 4 seconds");
+    await sleep(4000);
 
     // Appending more stuff to the page due to API limitations
     console.log("Appending pages due to API limitations");
     await Promise.all(
       responses.map(async (response) => {
-        await sleep(1000);
+        await sleep(2000);
         return notion.blocks.children.append({
           block_id: response.id,
           children: [
+            ...projectBlocks,
+            paragraph("\nPROJECT PREFERENCE or Beginner Project: ", {
+              bold: true,
+            }),
+            bullet("\n"),
             divider(),
 
             heading_2("Make sure candidate knows:"),
@@ -754,3 +775,4 @@ const createPages = async (pagesToCreate: TApplicants) => {
 };
 
 main();
+
