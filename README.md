@@ -63,7 +63,11 @@ Run the following command to merge the two JSON files into a single file called 
 pnpm merge
 ```
 
-## Step 13: Run the Script
+## Step 13: Place Past Applicants in src Folder
+
+Download the notion database for the project members of the previous projects as a csv file and convert that file into JSON format. Paste this JSON into a file called ``past-applicants.json`` within the ``src`` folder.
+
+## Step 14: Run the Script
 
 Run the script using the following command:
 
@@ -71,9 +75,9 @@ Run the script using the following command:
 pnpm exe
 ```
 
-This will execute your TypeScript script and transfer the data from the JSON file to the configured Notion database.
+This will execute your TypeScript script and transfer the data from the ``applicants.json`` file to the configured Notion database.
 
-## Step 14: Transfer to CFC Workspace
+## Step 15: Transfer to CFC Workspace
 
 If the notion database is in a workspace other than the CFC workspace, you can copy-paste it into the CFC workspace. In particular, select the database, press ``Ctrl+C``, switch to the appropriate place in the CFC workspace, and then press ``Ctrl+V``.
 
