@@ -6,7 +6,7 @@
     "scripts": {
         "build": "touch src/applicants.json && tsc --build && cp .env dist/.env",
         "exe": "pnpm build && node dist/main.js",
-        "merge": "node dist/merge-applicants.js"
+        "merge": "pnpm build && node dist/merge-applicants.js && cp src/applicants.json dist/applicants.json"
     },
     "devDependencies": {
         "prettier": "3.0.3",
