@@ -24,7 +24,7 @@ console.log("Running Notion API script");
 console.log(`Database ID: ${databaseId}`);
 console.log("Project config:", projectConfig);
 
-// 📝 JSON Mapper - matches your actual JSON structure
+//JSON Mapper - matches your actual JSON structure
 function mapJsonKeys(applicant: any) {
   return {
     Timestamp: applicant["Timestamp"] ?? "",
