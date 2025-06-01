@@ -24,10 +24,11 @@ console.log("Running Notion API script");
 console.log(`Database ID: ${databaseId}`);
 console.log("Project config:", projectConfig);
 
-// ✅ Zod Schema & Transform
+// Zod Schema & Transform
 const Applicant = z.object({
   Timestamp: z.string().optional().default("N/A"),
   "Full Name": z.string().optional().default("N/A"),
+  "Preferred name (if applicable)": z.string().optional().default("N/A"),
   Pronouns: z.string().optional().default("N/A"),
   Email: z.string().optional().default("N/A"),
   "UWA Student Number": z.string().optional().default("N/A"),
@@ -46,6 +47,7 @@ const Applicant = z.object({
 }).transform((applicant) => ({
   timestamp: applicant.Timestamp,
   name: applicant["Full Name"],
+  preferredName: applicant["Preferred name (if applicable)"],
   pronouns: applicant.Pronouns,
   email: applicant.Email,
   studentNumber: applicant["UWA Student Number"],
@@ -117,10 +119,10 @@ const getStatus = (hours: string): { name: string; color: "gray" | "orange"; } =
   return { name: "To Send Email", color: "orange" };
 };
 
-function getPastParticipationStatus(): {
-  name: string;
-  color: "yellow" | "orange" | "red" | "green" | "blue";
-} {
+// function getPastParticipationStatus(): {
+//   name: string;
+//   color: "yellow" | "orange" | "red" | "green" | "blue";
+// } {
   // for (const pastApplicant of pastApplicants) {
   //   // Simple email comparison - most reliable identifier
   //   if (pastApplicant.Email && pastApplicant.Email === applicant.email) {
@@ -144,8 +146,8 @@ function getPastParticipationStatus(): {
   //     }
   //   }
   // }
-  return { name: "Did not apply last time", color: "blue" };
-}
+//   return { name: "Did not apply last time", color: "blue" };
+// }
 
 //*========================================================================
 // Project Blocks Generation
@@ -214,12 +216,12 @@ const createPages = async (pagesToCreate: TApplicants) => {
     
     const responses = await Promise.all(
       batch.map(async (applicant) => {
-        console.log(applicant);
         await sleep(1500);
         return notion.pages.create({
           parent: { database_id: databaseId },
           properties: {
             Name: { title: [{ text: { content: applicant.name } }] },
+            "Preferred Name": { rich_text: [{text: {content: applicant.preferredName } }] },
             Email: { email: applicant.email },
             Pronouns: { rich_text: [{ text: { content: applicant.pronouns } }] },
             Status: { select: getStatus(applicant.weekly) },
@@ -232,17 +234,15 @@ const createPages = async (pagesToCreate: TApplicants) => {
             Discord: { rich_text: [{ text: { content: applicant.discord } }] },
             Github: { rich_text: [{ text: { content: applicant.github } }] },
             Linkedin: { rich_text: [{ text: { content: applicant.linkedin } }] },
-            Weekly_availability: {
+            Availability: {
               select: {
                 name: applicant.weekly,
                 color: getColourFromHours(applicant.weekly),
               },
             },
             "Student Number": { rich_text: [{ text: { content: applicant.studentNumber } }] },
-            Major: { rich_text: [{ text: { content: applicant.major } }] },
             "Study Level": { rich_text: [{ text: { content: applicant.degreeLevel } }] },
             "Year of Study": { rich_text: [{ text: { content: applicant.yearOfStudy } }] },
-            "Past Participation": { select: getPastParticipationStatus() },
           },
           children: [
             paragraph(
