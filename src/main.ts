@@ -3,8 +3,8 @@ import { Client } from "@notionhq/client";
 import { z } from "zod";
 import { env } from "./env.js";
 import projectConfig from "./projectConfig.js";
-import applicants from "./applicants.json" with { type: "json" };
-import pastApplicants from "./past-applicants.json" with { type: "json" };
+import applicants from "./applicants.json" assert { type: "json" };
+//import pastApplicants from "./past-applicants.json" with { type: "json" };
 import {
   bullet,
   bulletChildren,
@@ -23,29 +23,6 @@ const databaseId = env.NOTION_DATABASE_ID;
 console.log("Running Notion API script");
 console.log(`Database ID: ${databaseId}`);
 console.log("Project config:", projectConfig);
-
-//JSON Mapper - matches your actual JSON structure
-function mapJsonKeys(applicant: any) {
-  return {
-    Timestamp: applicant["Timestamp"] ?? "",
-    "Full Name": applicant["Name"] ?? "",
-    Pronouns: applicant["Pronouns"] ?? "",
-    Email: applicant["Email"] ?? "",
-    "UWA Student Number": applicant["Student Number"] ?? "",
-    "Which projects are the best match for your current skill level?": applicant["Project Preference"] ?? "",
-    "Discord Username (if you have one)": applicant["Discord"] ?? "",
-    "Link to GitHub (if you have one)": applicant["Github"] ?? "",
-    "LinkedIn profile (if you have one)": applicant["Linkedin"] ?? "",
-    "What is your major/what degree are you studying?": applicant["Major"] ?? "",
-    "Are you an undergraduate or postgraduate student?": applicant["Study Level"] ?? "",
-    "What year of your degree are you currently in?": applicant["Year of study"] ?? "",
-    "Please briefly describe your technical experience, in words": applicant["Technical Experience"] ?? "",
-    "Why do you want to be part of the Winter projects?": applicant["Reason for joining"] ?? "",
-    "Are you able to attend the project sessions in person?": applicant["Attend in person?"] ?? "",
-    "What is your rough weekly availability between June 21st and July 19th, 2025?": applicant["Weekly Availability"] ?? "",
-    "Anything else that you'd like us to know?": applicant["Like us to know"] ?? "",
-  };
-}
 
 // ✅ Zod Schema & Transform
 const Applicant = z.object({
@@ -88,11 +65,9 @@ const Applicant = z.object({
 }));
 
 const Applicants = z.array(Applicant);
-const mappedApplicants = applicants.map(mapJsonKeys);
-const validatedApplicants = Applicants.parse(mappedApplicants);
 
 type TApplicants = z.infer<typeof Applicants>;
-type TApplicant = z.infer<typeof Applicant>;
+//type TApplicant = z.infer<typeof Applicant>;
 
 //*========================================================================
 // Helper Functions
@@ -142,33 +117,33 @@ const getStatus = (hours: string): { name: string; color: "gray" | "orange"; } =
   return { name: "To Send Email", color: "orange" };
 };
 
-function getPastParticipationStatus(applicant: TApplicant): {
+function getPastParticipationStatus(): {
   name: string;
   color: "yellow" | "orange" | "red" | "green" | "blue";
 } {
-  for (const pastApplicant of pastApplicants) {
-    // Simple email comparison - most reliable identifier
-    if (pastApplicant.Email && pastApplicant.Email === applicant.email) {
-      // Check their previous status
-      if (pastApplicant.Status === "No Interview Scheduled") {
-        return { name: "Applied but did not schedule interview", color: "yellow" };
-      } else if (pastApplicant.Status === "No show") {
-        return { name: "Applied but no-showed interview", color: "red" };
-      } else if (pastApplicant.Status === "Interview Complete") {
-        // They completed an interview - check if they were accepted
-        const projectParticipation = pastApplicant["Previous Project Participation"] || pastApplicant.Property || "Unknown";
+  // for (const pastApplicant of pastApplicants) {
+  //   // Simple email comparison - most reliable identifier
+  //   if (pastApplicant.Email && pastApplicant.Email === applicant.email) {
+  //     // Check their previous status
+  //     if (pastApplicant.Status === "No Interview Scheduled") {
+  //       return { name: "Applied but did not schedule interview", color: "yellow" };
+  //     } else if (pastApplicant.Status === "No show") {
+  //       return { name: "Applied but no-showed interview", color: "red" };
+  //     } else if (pastApplicant.Status === "Interview Complete") {
+  //       // They completed an interview - check if they were accepted
+  //       const projectParticipation = pastApplicant["Previous Project Participation"] || pastApplicant.Property || "Unknown";
         
-        if (projectParticipation.toLowerCase().includes("rejected")) {
-          return { name: "Applied but was rejected", color: "orange" };
-        } else if (projectParticipation.includes("accepted") || projectParticipation.includes("Beginner") || 
-                   ["normal", "beginner", "both"].includes(projectParticipation)) {
-          return { name: `Applied and was accepted to ${projectParticipation}`, color: "green" };
-        } else {
-          return { name: `Previously interviewed (${projectParticipation})`, color: "green" };
-        }
-      }
-    }
-  }
+  //       if (projectParticipation.toLowerCase().includes("rejected")) {
+  //         return { name: "Applied but was rejected", color: "orange" };
+  //       } else if (projectParticipation.includes("accepted") || projectParticipation.includes("Beginner") || 
+  //                  ["normal", "beginner", "both"].includes(projectParticipation)) {
+  //         return { name: `Applied and was accepted to ${projectParticipation}`, color: "green" };
+  //       } else {
+  //         return { name: `Previously interviewed (${projectParticipation})`, color: "green" };
+  //       }
+  //     }
+  //   }
+  // }
   return { name: "Did not apply last time", color: "blue" };
 }
 
@@ -239,6 +214,7 @@ const createPages = async (pagesToCreate: TApplicants) => {
     
     const responses = await Promise.all(
       batch.map(async (applicant) => {
+        console.log(applicant);
         await sleep(1500);
         return notion.pages.create({
           parent: { database_id: databaseId },
@@ -256,7 +232,7 @@ const createPages = async (pagesToCreate: TApplicants) => {
             Discord: { rich_text: [{ text: { content: applicant.discord } }] },
             Github: { rich_text: [{ text: { content: applicant.github } }] },
             Linkedin: { rich_text: [{ text: { content: applicant.linkedin } }] },
-            "Weekly Availability": {
+            Weekly_availability: {
               select: {
                 name: applicant.weekly,
                 color: getColourFromHours(applicant.weekly),
@@ -266,7 +242,7 @@ const createPages = async (pagesToCreate: TApplicants) => {
             Major: { rich_text: [{ text: { content: applicant.major } }] },
             "Study Level": { rich_text: [{ text: { content: applicant.degreeLevel } }] },
             "Year of Study": { rich_text: [{ text: { content: applicant.yearOfStudy } }] },
-            "Past Participation": { select: getPastParticipationStatus(applicant) },
+            "Past Participation": { select: getPastParticipationStatus() },
           },
           children: [
             paragraph(
@@ -605,7 +581,8 @@ const createPages = async (pagesToCreate: TApplicants) => {
 // 🛠️ Main execution
 const main = async () => {
   try {
-    await createPages(validatedApplicants);
+    const pagesToCreate = Applicants.parse(applicants);
+    await createPages(pagesToCreate);
   } catch (error) {
     console.error("Error creating pages:", error);
   }
