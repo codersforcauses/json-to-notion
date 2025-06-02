@@ -246,7 +246,7 @@ const createPages = async (pagesToCreate: TApplicants) => {
           },
           children: [
             paragraph(
-              "Please ensure you make the candidate feel welcome and comfortable - interviews can be daunting!\nRemember, our goal is to not only understand a candidate's technical abilities, but also to gain a sense about their motivations, work ethic, ability to work as part of a team, and the chance that they will flake on us.",
+              "Please ensure you make the candidate feel welcome and comfortable - interviews can be daunting!\nOur goal is to not only understand a candidate's technical abilities, but also to gain a sense about their motivations, work ethic, ability to work as part of a team, and the chance that they will flake on us."
             ),
 
             divider(),
@@ -258,15 +258,10 @@ const createPages = async (pagesToCreate: TApplicants) => {
 
             heading_2("Candidate Introduction"),
             paragraph(
-              "The candidate should give a brief introduction about themselves.\nExams have just finished! How did their semester go? Have they participated in any uni events this year? Are they involved with any other clubs?",
+              "The candidate should give a brief introduction about themselves.\nHow did their semester go? Have they participated in any uni events this year? Are they involved with any other clubs?",
             ),
-            paragraph("Major/s: ", { bold: true }),
-            paragraph("Year of Study: ", { bold: true }),
-            paragraph("How did you hear about us: ", { bold: true }),
             paragraph("Have they been involved with CFC before (events or other projects)? ", { bold: true }),
-            paragraph("Are they a current member?: ", { bold: true }),
             paragraph("Other club participation: ", { bold: true }),
-            paragraph(""),
 
             divider(),
 
@@ -285,74 +280,288 @@ const createPages = async (pagesToCreate: TApplicants) => {
 
             divider(),
 
-            heading_2("Additional questions"),
-            paragraph(
-              "Here is a chance to get to know more about the candidate's application. Pre-fill as much of this as possible to save time for more in-depth questions",
-              { italic: true },
-            ),
+            heading_2("Experience and Technical Questions"),
+            paragraph("Try to identify skills in technologies beneficial to CFC projects, i.e. HTML, CSS, JS, React.js, typescript, django, next.js. Skills with other frontend and backend frameworks are also applicable.", { italic: true }),
+            paragraph("Ask about personal projects and the technologies the candidate used to develop these. Ask about the challenges they experienced in developing these projects and how they overcame them. This shows critical thinking and depth of understanding.", { italic: true }),
+
+            divider(),
+
+            heading_2("Experience questions"),
+            paragraph("1. Tell me about your technical experience?",),
+            paragraph("2. Are you familiar with web technologies, elaborate on your experience with them.",),
+            paragraph("3. Are you familiar with git and github, or other version control software? Describe a time you used version control to aid the development of a project.",),
+            paragraph("4. Describe a personal project you’ve worked on. Explain your approach, including any technical challenges you faced and how you solved them. Highlight any details that showcase your skills.\n",),
             {
               object: "block",
               paragraph: {
                 rich_text: [
-                  { text: { content: "Do they have lots of " }, annotations: { italic: true } },
-                  { text: { content: "technical experience" }, annotations: { italic: true, underline: true } },
-                  { text: { content: "? What kind of projects have they worked on?" }, annotations: { italic: true } },
-                ],
-              },
-            },
-            {
-              object: "block",
-              paragraph: {
-                rich_text: [
-                  { text: { content: "If they have a " }, annotations: { italic: true } },
-                  { text: { content: "personal project" }, annotations: { italic: true, underline: true } },
                   {
-                    text: {
-                      content: ", this is a great chance to have them explain their thought process and their passion for software development!",
-                    },
-                    annotations: { italic: true },
+                    text: { content: "Optional personality/motivation check - gauge enthusiasm and general tech knowledge: " },
+                    annotations: { bold: true },
                   },
+                  { text: { content: "What would your next personal project be? Given the opportunity are there any particular technologies or niches that you would like to explore?" } },
                 ],
               },
             },
-            {
-              object: "block",
-              paragraph: {
-                rich_text: [
-                  { text: { content: "If they don't have any " }, annotations: { italic: true } },
-                  { text: { content: "web development experience" }, annotations: { italic: true, underline: true } },
-                  {
-                    text: { content: ", what is their motivation for applying to CFC?\n" },
-                    annotations: { italic: true },
-                  },
-                ],
-              },
-            },
-            paragraph("Technical experience", { bold: true, underline: true }),
-            paragraph("Coding Experience: ", { bold: true }),
-            paragraph("What languages are you familiar with? ", { italic: true }),
+
+            divider(),
+
+            heading_2("Technical experience", { bold: true, underline: true }),
+            paragraph("Pick a question relevant to a technology that the applicant has mentioned. Make sure the applicant knows what they are talking about!", { italic: true }),
             paragraph(""),
-            paragraph("What are your experiences with these languages in uni? ", { italic: true }),
+
             paragraph(
               applicant.preference && applicant.preference.toLowerCase().includes("beginner")
                 ? "NOTE: this person applied only for the beginner projects, so some of the questions below may be irrelevant."
                 : "",
               { underline: true, italic: true }
             ),
-            paragraph("Internships or industry experience?: ", { bold: true }),
+            paragraph("Beginner (optional, ask more as a conversation starter):", { bold: true }),
+            bullet("What is your preferred IDE/editor and why?"),
+            bullet("What is the best operating system and why?"),
+            bullet("How would you approach a new technical concept? What resources etc would you use?"),
+            bullet("What are your usual steps for debugging code?"),
             paragraph(""),
-            paragraph("Personal / Side Projects: ", { bold: true }),
+            paragraph("Client projects (pick 3):", { bold: true }),
+            bullet("What are HTML, CSS, and JavaScript, and how do they work together in web development?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "HTML provides the structure, CSS styles the appearance, and JavaScript adds interactive behavior to web pages." } },
+                ],
+              },
+            },
+            bullet("Can you explain the difference between client-side and server-side programming?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "Client-side code runs in the browser (e.g., JavaScript), while server-side code runs on the server, handling requests and - sending data to the client (e.g., Python, Node.js)." } },
+                ],
+              },
+            },
+            bullet("When developing on a computer, how would you see how a website would look on different devices? (inspector)", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "Use the browser’s Developer Tools (usually F12 or right-click > Inspect), then select 'Responsive Design' mode or use the - device toolbar to preview on various screen sizes." } },
+                ],
+              },
+            },
+            bullet("Can you describe what responsive design is and some ways to implement it?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "Responsive design makes websites adapt to different screen sizes and devices. It can be implemented with flexible grid - layouts, media queries, and responsive images." } },
+                ],
+              },
+            },
+            bullet("What is version control, and why is it important in software development?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "Version control tracks and manages changes to code, enabling collaboration, undoing changes, and keeping a history of code - versions, which is critical for team projects." } },
+                ],
+              },
+            },
+            bullet("What is the difference between `display: none;` and `visibility: hidden;`?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "`display: none` removes the element from the document flow, while `visibility: hidden` hides the element but keeps its allocated - space on the page." } },
+                ],
+              },
+            },
+            bullet("How would you create a responsive layout without using any frameworks?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "Use CSS Flexbox or Grid for layout, and media queries to adjust styles based on screen size." } },
+                ],
+              },
+            },
+            bullet("Explain the difference between == and === in JavaScript.", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "== checks for value equality, allowing type conversion, while === checks for both value and type equality without conversion." } },
+                ],
+              },
+            },
+            bullet("What are the 4 ways to declare a variable in JavaScript?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "var, let, const, and declaring globally (without a keyword)." } },
+                ],
+              },
+            },
+            bullet("How would you change branches in Git?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "Use the command `git checkout <branch-name>` to switch to a different branch." } },
+                ],
+              },
+            },
+            bullet("How would you create a hyperlink that opens in a new tab?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: 'Use `<a href="https://example.com" target="_blank">Link</a>` to open the link in a new tab.' } },
+                ],
+              },
+            },
+            bullet("What is the purpose of the alt attribute in an image tag?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "The alt attribute provides alternative text for screen readers and is displayed if the image fails to load, improving - accessibility." } },
+                ],
+              },
+            },
+            bullet("How do you make text bold in CSS?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "Use `font-weight: bold;` in CSS." } },
+                ],
+              },
+            },
+            bullet("What CSS property would you use to add space between an element's border and its content?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "The padding property adds space between the border and the content of an element." } },
+                ],
+              },
+            },
+            bullet("How would you stage a file called index.html for commit?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "Use the command `git add index.html` to stage the file." } },
+                ],
+              },
+            },
+            bullet("How would you center text within a `<div>` element using CSS?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: " Use `text-align: center;` on the `<div>`." } },
+                ],
+              },
+            },
+            bullet("How do you link a CSS file to an HTML file?", { bold: true }),
+            {
+              object: "block",
+              paragraph: {
+                rich_text: [
+                  {
+                    text: { content: "Correct Answer:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: 'Use the `<link>` tag inside the `<head>` section, like `<link rel="stylesheet" href="styles.css">`.' } },
+                ],
+              },
+            },
+
+            divider(),
+
+            heading_2("Teamwork questions"),
+            paragraph("Try to gauge how effective the applicant will be when working in a team. It can be useful to relate these questions to earlier group projects the applicant may have mentioned.", { italic: true }),
             paragraph(""),
-            paragraph("Are they familiar with HTML, CSS, JavaScript?: ", { bold: true }),
+            paragraph("Questions (do not need to ask all):", { bold: true }),
+            paragraph("1. Describe a time when you had to work closely with others to complete a project. What was your role, and how did you contribute to the team’s success?"),
+            paragraph("2. What challenges did you face when working in the group environment, and how did you handle them?", { bold: true }),
+            paragraph("3. Describe a time when you disagreed with your colleague and how would you resolve the situation? How did you come to a compromise?"),
             paragraph(""),
-            paragraph("Are they familiar with any front end web frameworks?: ", { bold: true }),
-            paragraph(""),
-            paragraph("Are they familiar with any back end web frameworks?: ", { bold: true }),
-            paragraph(""),
-            paragraph("Do they have a preference for front end or back end?: ", { bold: true }),
-            paragraph(""),
-            paragraph("Do they have experience with git? ", { bold: true }),
-            paragraph(""),
+            paragraph("Bonus Questions (Lauren):", { bold: true }),
+            paragraph("4. What is most important to you when working in a team?"),
+            paragraph("5. Have you held a job/internship that required you to work in a larger team? What strategies did you use to work effectively in this team?"),
+            
+            divider(),
+            
+            heading_2("Availability"),
             {
               object: "block",
               paragraph: {
@@ -366,81 +575,66 @@ const createPages = async (pagesToCreate: TApplicants) => {
               },
             },
             paragraph(
-              "Gauge whether they have other Saturday commitments (e.g. work), if they will be likely to flake, etc.\nProject sessions will be held on Saturdays at UWA around 11am - 4pm",
+              "Gauge whether they have other Saturday commitments (e.g. work), if they will be likely to flake, etc.\nProject sessions will be held on Saturdays 11am - 4pm",
               { italic: true },
             ),
             todo("Free on Saturdays?", { bold: true }),
-            bullet("Weekly availability: \n"),
+            {
+              object: "block",
+              bullet: {
+                rich_text: [
+                  {
+                    text: { content: "Weekly availability:" },
+                  },
+                  { 
+                    text: { content: `${applicant.weekly}`} ,
+                    annotations: { bold: true },
+                  },
+                ],
+              },
+            },
+            paragraph(""),
+            paragraph("Questions:", { bold: true }),
+            paragraph(`1. What are your plans for the ${projectConfig.season} holiday? Do you have any other commitments? ` ),
+            paragraph("2. How would you manage balancing your commitments if you are accepted into our program? " ),
+
+            divider(),
+
+            heading_2("Personality and Motivation"),
             paragraph(
-              `What are your plans for the ${projectConfig.season} holiday? Do you have any other commitments? `,
-              { bold: true },
+              "Find out what motivated the applicant to apply for the projects and judge whether you think they will be committed. People just here for the resume will be more likely to flake.\n",
+              { italic: true },
             ),
-            bullet(""),
             paragraph(
-              "How would you manage balancing your commitments if you are accepted into our program? ",
-              { bold: true },
+              "Judge if you think the applicant has a personality that will fit well within a team. Will they be eager to get to know and work with the other team members? Will they be engaged and continue to contribute throughout the project period?\n",
+              { italic: true },
+            ),
+            paragraph("Questions:", { bold: true }),
+            paragraph("1. Why do you want to be a part of the project?"),
+            paragraph(`   ${applicant.reason}`, { bold: true }),
+            paragraph(
+              "2. (if not asked before) Why did decide to start programming and what keeps you motivated?",
+            ),
+            paragraph(
+              "3. What else will you be doing with your time over the break? Do you have any hobbies/job/travel plans? (this is important to gauge personality but also project commitment)"
+            ),
+            paragraph(
+              "4. Let's pretend that you are faced with a new technology or language, how do you go about learning something new? "
             ),
             paragraph(""),
+            heading_2("Bonus Question "),
+            paragraph("Optional (pick one) - only need to ask if you feel you don’t know the person well enough yet. Can also be used to gauge critical thinking depending on question (e.g. how would you eat a door needs a creative answer)", { italic: true }),
+            bullet("If you could have dinner with any fictional character, who would it be and why?"),
+            bullet("If you were a superhero, what would your superpower be?"),
+            bullet("How would you eat a door?"),
+            bullet("You can only eat one type of cuisine for the rest of your life. What would you pick?"),
+            bullet("Imagine you’re organizing a music festival – which three artists or bands are headlining?"),
+            bullet("If you were to describe yourself as an animal, what would it be and why?"),
 
             divider(),
 
-            heading_2("Teamwork"),
-            paragraph(
-              "A good candidate not only needs technical proficiency, but they have to be a pleasant person to work with! \n",
-              { italic: true },
-            ),
-            paragraph("Describe your experiences working in collaborative teams. In uni or work or otherwise.", { bold: true }),
-            bullet("\n"),
-            paragraph(
-              "Have you ever disagreed with a team member on how to solve a problem? How did you solve the disagreements?",
-              { bold: true },
-            ),
-            paragraph(
-              "( Did they try and understand the other person's perspective? How open are they to criticism and changing their views? )",
-              { italic: true },
-            ),
-            bullet("\n"),
+  
 
-            divider(),
-
-            heading_2("Vibe Check"),
-            paragraph("Will this person follow through and commit to a CFC project? This is where you will find out!", { italic: true }),
-            paragraph(""),
-            paragraph("Why do you want to be part of the projects?:", { bold: true }),
-            paragraph(
-              "( They answered this in the application form, but they should be able to confidently answer in person )",
-              { italic: true },
-            ),
-            bullet(""),
-            paragraph(
-              "How do you spend your free time? Do you have any hobbies? How much time do you have to work on the project?",
-              { bold: true },
-            ),
-            bullet(""),
-            paragraph("Why did you decide to start coding? ", { bold: true }),
-            bullet(""),
-            paragraph(
-              "Let's pretend that you are faced with a new technology or language, how do you go about learning something new? ",
-              { bold: true },
-            ),
-            paragraph("( What kind of resources do they use? What if they got stuck on a problem? )", { italic: true }),
-            bullet(""),
-            paragraph(
-              "We have a lot of applicants and it is often a very hard decision for us in terms of who we take on for a project team.\nIf we were unable to allocate you a spot, what would you do during the holidays? ",
-              { bold: true },
-            ),
-            paragraph(
-              "( Do they have specific personal project ideas? What languages/technologies would they use? Have they done any planning? )",
-              { italic: true },
-            ),
-            bullet(""),
-            paragraph("What 3 things would you take if you got stuck on an island?", { bold: true }),
-            paragraph("( + any other vibe check questions: )", { italic: true }),
-            bullet("\n"),
-
-            divider(),
-
-            heading_2("Introduce the projects"),
           ],
         });
       })
@@ -458,8 +652,96 @@ const createPages = async (pagesToCreate: TApplicants) => {
           block_id: response.id,
           children: [
             ...projectBlocks,
-            paragraph("\nPROJECT PREFERENCE or Beginner Project: ", { bold: true }),
-            bullet("\n"),
+            heading_2("Introduce the projects"),
+            paragraph("Robodrone Comp Leaderboard", { bold: true }),
+            paragraph("A web-based leaderboard for Squadrone’s Drone Competition & STEM Festival, allowing admins to manage scores and rankings while showcasing participant performance to the public."),
+            {
+              object: "block",
+              bullet: {
+                rich_text: [
+                  {
+                    text: { content: "Problem it solves:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "Manually tracking participant rankings and scores for the drone competition is inefficient and error-prone." } },
+                ],
+              },
+            },
+            {
+              object: "block",
+              bullet: {
+                rich_text: [
+                  {
+                    text: { content: "Project overview: " },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "This platform allows administrators to manage and update participant rankings for the Drone Competition. Participants and the public can view results and leaderboards online." } },
+                ],
+              },
+            },
+            bullet(
+              "Tech stack:",
+              { bold: true },
+              bulletChildren([
+                "React",
+                "Next.js",
+                "Django",
+              ]),
+            ),
+            paragraph(""),
+
+            paragraph("Transplant Australia Sport Sign-up", { bold: true }),
+            paragraph("An event registration platform for the Transplant Games, collecting participant details, medical information, and event preferences."            ),
+            {
+              object: "block",
+              bullet: {
+                rich_text: [
+                  {
+                    text: { content: "Problem it solves:" },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "Currently, event registrations are handled manually or via basic forms, creating difficulties in managing participant data, payments, and event logistics." } },
+                ],
+              },
+            },
+            {
+              object: "block",
+              bullet: {
+                rich_text: [
+                  {
+                    text: { content: "Project overview: " },
+                    annotations: { bold: true },
+                  },
+                  { text: { content: "This platform will enable participants to register for the Transplant Games, pay registration fees, and select events. It also collects necessary medical and emergency contact information. Admin features include event restrictions management, CSV imports for event times, and participant data editing." } },
+                ],
+              },
+            },
+            bullet(
+              "Tech stack:",
+              { bold: true },
+              bulletChildren([
+                "React",
+                "Next.js",
+                "Django",
+                "Stripe"
+              ]),
+            ),
+            paragraph(""),
+            heading_2("Introduce the beginner projects"),
+            bullet(
+              "A guided project where volunteers create a personal portfolio website to showcase their skills. This project is ideal for beginners who want to learn web development basics and gain practical experience."
+            ),
+            paragraph(""),
+            paragraph("Ask the applicants preference for project (if applying for client projects) and whether they would prefer to work on the frontend or backend.", { italic: true }),
+            paragraph(
+              "PROJECT PREFERENCE!!!",
+              { bold: true , underline: true},
+            ),
+            todo("Beginner Project", { bold: true }),
+            todo("Client Project", { bold: true }),
+            todo("Frontend", { bold: true }),
+            todo("Backend", { bold: true }),
+
             divider(),
 
             heading_2("Make sure candidate knows:"),
@@ -477,8 +759,7 @@ const createPages = async (pagesToCreate: TApplicants) => {
                 "Experience on real world projects",
                 "Form great connections with like-minded students and industry",
                 "Our past volunteers have benefited from the experience they gained as successful software engineers",
-                "Put yourselves ahead of other students when it comes to applying for jobs and internships",
-                "Mention our industry nights and that committee always gets hired ;)",
+                "Help charities!!",
               ]),
             ),
 
@@ -491,13 +772,10 @@ const createPages = async (pagesToCreate: TApplicants) => {
             divider(),
 
             heading_2("Wrap Up"),
+            bullet("0-15 people per project"),
             bullet("Are they in our Discord? Are they following our socials (fb, ig)? We will be posting updates there"),
             bullet("Expect our email, we will get back to you within 2 weeks"),
-            bullet("Encourage people to start with to-do app to brush up basic skills"),
-            bullet("0-15 people per project"),
-            bullet(
-              "Let them know we will assign people (WADL: easier; POOPs: harder), but also dependent on a few other things. We try to keep the teams balanced\n",
-            ),
+            bullet("Encourage people to start with to-do app to brush up basic skills. *to do apps are not a compulsory thing, but trying out a project using the relevant stack is very helpful!"),
 
             divider(),
 
