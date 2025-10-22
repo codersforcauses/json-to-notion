@@ -59,7 +59,7 @@ const Applicant = z
       .string()
       .optional()
       .default("N/A"),
-    "Why do you want to be part of the Winter projects?": z
+    "Why do you want to be part of the Summer projects?": z
       .string()
       .optional()
       .default("N/A"),
@@ -93,7 +93,7 @@ const Applicant = z
     yearOfStudy: applicant["What year of your degree are you currently in?"],
     techExp:
       applicant["Please briefly describe your technical experience, in words"],
-    reason: applicant["Why do you want to be part of the Winter projects?"],
+    reason: applicant["Why do you want to be part of the Summer projects?"],
     preference:
       applicant[
         "Which projects are the best match for your current skill level?"
@@ -716,7 +716,7 @@ const createPages2 = async (pagesToCreate: TApplicants) => {
             paragraph(`${applicant.techExp.slice(0, 1999)}`),
             paragraph(`${applicant.techExp.slice(1999)}`),
             paragraph(
-              `Why do you want to be part of the ${applicant.preference}?`,
+              `Why do you want to be part of the Summer project (${applicant.preference}) ?`,
               { underline: true },
             ),
             paragraph(`${applicant.reason.slice(0, 1999)}`),
