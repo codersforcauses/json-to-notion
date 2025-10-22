@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@notionhq/client':
-        specifier: ^2.2.13
-        version: 2.2.13
+        specifier: ^2.3.0
+        version: 2.3.0
       '@t3-oss/env-core':
         specifier: ^0.7.1
         version: 0.7.1(typescript@5.2.2)(zod@3.22.4)
@@ -30,8 +30,8 @@ importers:
 
 packages:
 
-  '@notionhq/client@2.2.13':
-    resolution: {integrity: sha512-wJpEl30QUSy2K3/Q2c2knNiZlLXJ17JnQgaIiFbN68IMJy+2TE9fXLxvV1N/cMVs2+SpteAa6PlyrUgfGdlmDg==}
+  '@notionhq/client@2.3.0':
+    resolution: {integrity: sha512-l7WqTCpQqC+HibkB9chghONQTYcxNQT0/rOJemBfmuKQRTu2vuV8B3yA395iKaUdDo7HI+0KvQaz9687Xskzkw==}
     engines: {node: '>=12'}
 
   '@t3-oss/env-core@0.7.1':
@@ -112,7 +112,7 @@ packages:
 
 snapshots:
 
-  '@notionhq/client@2.2.13':
+  '@notionhq/client@2.3.0':
     dependencies:
       '@types/node-fetch': 2.6.7
       node-fetch: 2.7.0
@@ -121,8 +121,9 @@ snapshots:
 
   '@t3-oss/env-core@0.7.1(typescript@5.2.2)(zod@3.22.4)':
     dependencies:
-      typescript: 5.2.2
       zod: 3.22.4
+    optionalDependencies:
+      typescript: 5.2.2
 
   '@types/node-fetch@2.6.7':
     dependencies:
