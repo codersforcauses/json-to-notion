@@ -15,8 +15,6 @@ import {
   todo,
   toggle,
   toggleChildren,
-  // toggleHeading_2,
-  // type Heading2Children,
 } from "./lib/notion/block.js";
 import { BlockObjectRequest } from "@notionhq/client/build/src/api-endpoints.js";
 
@@ -704,17 +702,22 @@ const createPages2 = async (pagesToCreate: TApplicants) => {
 
             divider(),
 
-            // toggleHeading_2(
-            //   "Application form",[
-            //     paragraph("Describe your technical experience", {underline: true,}),
-            //     paragraph(`${applicant.techExp.slice(0, 1999)}`),
-            //     paragraph(`${applicant.techExp.slice(1999)}`),
-            //     paragraph(`Why do you want to be part of the Winter project (${applicant.preference}) ?`,{ underline: true },),
-            //     paragraph(`${applicant.reason.slice(0, 1999)}`),
-            //     paragraph(`${applicant.reason.slice(1999)}`),
-            //     paragraph("Anything else that you'd like us to know?", {underline: true,}),
-            //     paragraph(`${applicant.anythingElse}\n`)
-            //   ] as Heading2Children ),
+            heading_2("Application form"),
+            paragraph("Describe your technical experience", {
+              underline: true,
+            }),
+            paragraph(`${applicant.techExp.slice(0, 1999)}`),
+            paragraph(`${applicant.techExp.slice(1999)}`),
+            paragraph(
+              `Why do you want to be part of the Summer project (${applicant.preference}) ?`,
+              { underline: true },
+            ),
+            paragraph(`${applicant.reason.slice(0, 1999)}`),
+            paragraph(`${applicant.reason.slice(1999)}`),
+            paragraph("Anything else that you'd like us to know?", {
+              underline: true,
+            }),
+            paragraph(`${applicant.anythingElse}\n`),
 
             divider(),
 
