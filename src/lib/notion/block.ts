@@ -196,6 +196,55 @@ const divider = (): BlockObjectRequest => ({
   divider: {},
 });
 
+type Heading2Block = Extract<BlockObjectRequest, { heading_2: any }>;
+type Heading2Children = Heading2Block["heading_2"]["children"];
+const toggleHeading_2 = (
+  content: string,
+  children?: Heading2Children,
+): BlockObjectRequest => ({
+  object: "block",
+  heading_2: {
+    rich_text: [
+      {
+        text: {
+          content: content,
+        },
+      },
+    ],
+    is_toggleable: true,
+    children: children,
+  },
+});
+
+type QuoteBlock = Extract<BlockObjectRequest, { quote: any }>;
+type QuoteChildren = QuoteBlock["quote"]["children"];
+const quote = (
+  content: string,
+  { bold, italic, underline }: FontOptions = {
+    bold: false,
+    italic: false,
+    underline: false,
+  },
+  children?: QuoteChildren,
+): BlockObjectRequest => ({
+  object: "block",
+  quote: {
+    rich_text: [
+      {
+        text: {
+          content: content,
+        },
+        annotations: {
+          bold: bold,
+          italic: italic,
+          underline: underline,
+        },
+      },
+    ],
+    children: children,
+  },
+});
+
 export {
   heading_2,
   paragraph,
@@ -206,4 +255,8 @@ export {
   toggle,
   toggleChildren,
   divider,
+  toggleHeading_2,
+  quote,
 };
+
+export type { Heading2Children}

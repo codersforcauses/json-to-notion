@@ -15,6 +15,8 @@ import {
   todo,
   toggle,
   toggleChildren,
+  // toggleHeading_2,
+  // type Heading2Children,
 } from "./lib/notion/block.js";
 import { BlockObjectRequest } from "@notionhq/client/build/src/api-endpoints.js";
 
@@ -34,8 +36,9 @@ const Applicant = z
     "Full Name": z.string().optional().default("N/A"),
     "Preferred name (if applicable)": z.string().optional().default("N/A"),
     Pronouns: z.string().optional().default("N/A"),
-    Email: z.string().optional().default("N/A"),
+    "Email Address": z.string().optional().default("N/A"),
     "UWA Student Number": z.string().optional().default("N/A"),
+    "Are you a member of CFC?": z.string().optional().default("N/A"),
     "Which projects are the best match for your current skill level?": z
       .string()
       .optional()
@@ -59,12 +62,12 @@ const Applicant = z
       .string()
       .optional()
       .default("N/A"),
-    "Why do you want to be part of the Summer projects?": z
+    "Why do you want to be part of the Winter projects?": z
       .string()
       .optional()
       .default("N/A"),
-    "in person?": z.string().optional().default("N/A"),
-    availability: z.string().optional().default("N/A"),
+    "Are you able to attend the project sessions in person?": z.string().optional().default("N/A"),
+    "What is your rough weekly availability between June 20 - July 18": z.string().optional().default("N/A"),
     "Anything else that you'd like us to know?": z
       .string()
       .optional()
@@ -79,8 +82,9 @@ const Applicant = z
     name: applicant["Full Name"],
     preferredName: applicant["Preferred name (if applicable)"],
     pronouns: applicant.Pronouns,
-    email: applicant.Email,
+    email: applicant["Email Address"],
     studentNumber: applicant["UWA Student Number"],
+    membership: applicant["Are you a member of CFC?"],
     projectMatch:
       applicant[
         "Which projects are the best match for your current skill level?"
@@ -93,16 +97,14 @@ const Applicant = z
     yearOfStudy: applicant["What year of your degree are you currently in?"],
     techExp:
       applicant["Please briefly describe your technical experience, in words"],
-    reason: applicant["Why do you want to be part of the Summer projects?"],
+    reason: applicant["Why do you want to be part of the Winter projects?"],
     preference:
       applicant[
         "Which projects are the best match for your current skill level?"
       ],
-    canAttend: applicant["in person?"],
-    weekly: applicant["availability"],
+    canAttend: applicant["Are you able to attend the project sessions in person?"],
+    weekly: applicant["What is your rough weekly availability between June 20 - July 18"],
     anythingElse: applicant["Anything else that you'd like us to know?"],
-    intermediateEoi:
-      applicant["(Intermediate)Interest in moving onto the Client Projects"],
   }));
 
 const Applicants = z.array(Applicant);
@@ -242,11 +244,6 @@ projectConfig.projects.forEach((project) => {
   projectBlocks.push(paragraph(""));
 });
 
-projectBlocks.push(heading_2("Introduce the beginner projects"));
-projectConfig.beginnerProjectInfo.forEach((info) =>
-  projectBlocks.push(bullet(info)),
-);
-
 const createRemainingBlocks = (): BlockObjectRequest[] => {
   return [
     {
@@ -293,37 +290,33 @@ const createRemainingBlocks = (): BlockObjectRequest[] => {
 
     divider(),
     heading_2("Introduce the projects"),
-    paragraph("Bloom Room Booking System", { bold: true }),
+    paragraph("Electrifying Everything WA Website", { bold: true }),
     paragraph(
-      "Problem: Bloom, an NFP that runs workshops and facilitates coworking spaces for young entrepreneurs don’t have a room booking site that fits their purposes. They currently use a system made by spacecubed that has features they don’t need and requires a separate account/login.",
+      "Problem: The current website does not have a backend and is overall pretty static. It could benefit from having its data ingested from the RenewEconomy website. Because of the lack of backend, the process of updating the frontend visuals could be tedious.",
     ),
     paragraph(
-      "Overview:  We will be creating a room booking system for the Bloom coworking space in St Catherine’s college. The system will need to allow users to enter their name and email to book a room. They will be able to reschedule their booking via an email link they will be sent after the booking is made. We are aiming to integrate the system with google calendar and possibly notion. This project may be more backend heavy and will include working with email services and google calendar integration.",
+      "Overview: The revamped website would be more robust with a backend and optimised with streamlined data ingestion. The visuals of the page would also look more responsive and standardised.",
     ),
     bullet(
       "Tech stack:",
       { bold: true },
-      bulletChildren(["React", "Next.js", "Django"]),
+      bulletChildren(["React", "Next.js", "Tailwind", "Tendenci", "PostgreSQL", "Vercel"]),
     ),
     paragraph(""),
 
-    paragraph("UWA Game Development Club Website", { bold: true }),
+    paragraph("UWA Agronomy Club Website", { bold: true }),
     paragraph(
-      "Problem: The UWA Game Dev club is a new club that doesn’t have a website yet! They need a way for people to find out about the club, and want to showcase their members creations.",
+      "Problem: The current website is just a prototype with minimal functionalities and has certain bugs upon logging in. There are no hierarchical admin features, making handover an issue to less tech-savvy students. There are also no study materials up at the moment for students to refer.",
     ),
     paragraph(
-      "Overview: We will be creating a website to provide information about the club, let members know about their upcoming events, and showcase the games and art that members create in the game jam events that the club runs. We hope to integrate with itch.io so that visitors can play the games via our site, and allow playback of video/audio for the art showcase. Main project focuses will be making a cool and creative frontend and itch.io, video and audio integration.",
+      "Overview: The administrative functionality alongside deployment runbooks allow agricultural students from the club to better manage the website as it is an education-first agricultural community by students for students. The Study Materials Library tab would then serve as a platform for students to gain relevant knowledge.",
     ),
     bullet(
       "Tech stack:",
       { bold: true },
-      bulletChildren(["React", "Next.js", "Django", "Itch.io API"]),
+      bulletChildren(["React", "Next.js", "TypeScript", "Tailwind", "Django", "Firestore", "Firebase", "Google Cloud"]),
     ),
 
-    heading_2("Introduce the beginner project"),
-    bullet(
-      "A guided project where volunteers create a personal portfolio website to showcase their skills. This project is ideal for beginners who want to learn web development basics and gain practical experience.",
-    ),
     heading_2("Introduce the intermediate project"),
     bullet(
       "A guided project where volunteers learn about the frameworks used in the client projects, i.e. next.js (with react) and Django. This project is ideal for those who have completed Agile Web dev and want to gain experience with industry standard technologies.",
@@ -334,7 +327,6 @@ const createRemainingBlocks = (): BlockObjectRequest[] => {
       { italic: true },
     ),
     paragraph("PROJECT PREFERENCE!!!", { bold: true, underline: true }),
-    todo("Beginner Project", { bold: true }),
     todo("Client Project", { bold: true }),
     todo("Frontend", { bold: true }),
     todo("Backend", { bold: true }),
@@ -671,14 +663,11 @@ const createPages2 = async (pagesToCreate: TApplicants) => {
             "Year of Study": {
               rich_text: [{ text: { content: applicant.yearOfStudy } }],
             },
-            "Intermediate EOI": {
-              rich_text: [{ text: { content: applicant.intermediateEoi } }],
-            },
           },
           children: [
             // First 100 blocks
             paragraph(
-              "Please ensure you make the candidate feel welcome and comfortable - interviews can be daunting!\nOur goal is to not only understand a candidate's technical abilities, but also to gain a sense about their motivations, work ethic, ability to work as part of a team, and the chance that they will flake on us.",
+              "Please ensure you make the candidate feel welcome and comfortable - interviews can be daunting!\n\nOur goal is to not only understand a candidate's technical abilities, but also to gain a sense about their motivations, work ethic, ability to work as part of a team, and the chance that they will flake on us.",
             ),
             heading_2("Before the interview"),
             paragraph(
@@ -703,28 +692,29 @@ const createPages2 = async (pagesToCreate: TApplicants) => {
               `The applicant is doing ${applicant.degreeLevel}, ${applicant.yearOfStudy}`,
               { bold: true },
             ),
+            
             paragraph(
-              "The candidate should give a brief introduction about themselves.\nHow did their semester go?\n Have they participated in any uni events this year?\n Are they involved with any other clubs?\nHave they been involved with CFC before (events or other projects)?\nOther club participation: \n",
+              "• The candidate should give a brief introduction about themselves.\n\n" + 
+              "• How did their semester go?\n\n" + 
+              "• Have they participated in any uni events this year?\n\n" + 
+              "• Are they involved with any other clubs?\n\n" +
+              "•Have they been involved with CFC before (events or other projects)?\n\n" +
+              "• Other club participation: \n"
             ),
 
             divider(),
 
-            heading_2("Application form"),
-            paragraph("Describe your technical experience", {
-              underline: true,
-            }),
-            paragraph(`${applicant.techExp.slice(0, 1999)}`),
-            paragraph(`${applicant.techExp.slice(1999)}`),
-            paragraph(
-              `Why do you want to be part of the Summer project (${applicant.preference}) ?`,
-              { underline: true },
-            ),
-            paragraph(`${applicant.reason.slice(0, 1999)}`),
-            paragraph(`${applicant.reason.slice(1999)}`),
-            paragraph("Anything else that you'd like us to know?", {
-              underline: true,
-            }),
-            paragraph(`${applicant.anythingElse}\n`),
+            // toggleHeading_2(
+            //   "Application form",[
+            //     paragraph("Describe your technical experience", {underline: true,}),
+            //     paragraph(`${applicant.techExp.slice(0, 1999)}`),
+            //     paragraph(`${applicant.techExp.slice(1999)}`),
+            //     paragraph(`Why do you want to be part of the Winter project (${applicant.preference}) ?`,{ underline: true },),
+            //     paragraph(`${applicant.reason.slice(0, 1999)}`),
+            //     paragraph(`${applicant.reason.slice(1999)}`),
+            //     paragraph("Anything else that you'd like us to know?", {underline: true,}),
+            //     paragraph(`${applicant.anythingElse}\n`)
+            //   ] as Heading2Children ),
 
             divider(),
 
@@ -988,7 +978,7 @@ const createPages2 = async (pagesToCreate: TApplicants) => {
               "3. Describe a time when you disagreed with your colleague and how would you resolve the situation? How did you come to a compromise?\n",
             ),
 
-            paragraph("Bonus Questions (Lauren):", { bold: true }),
+            paragraph("Bonus Questions:", { bold: true }),
             paragraph(
               "4. What is most important to you when working in a team?",
             ),
