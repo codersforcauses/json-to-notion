@@ -15,6 +15,8 @@ import {
   todo,
   toggle,
   toggleChildren,
+  toggleHeading_2,
+  type Heading2Children,
 } from "./lib/notion/block.js";
 import { BlockObjectRequest } from "@notionhq/client/build/src/api-endpoints.js";
 
@@ -32,7 +34,7 @@ const Applicant = z
   .object({
     Timestamp: z.string().optional().default("N/A"),
     "Full Name": z.string().optional().default("N/A"),
-    "Preferred name (if applicable)": z.string().optional().default("N/A"),
+    "Preferred Name (if applicable)": z.string().optional().default("N/A"),
     Pronouns: z.string().optional().default("N/A"),
     "Email Address": z.string().optional().default("N/A"),
     "UWA Student Number": z.string().optional().default("N/A"),
@@ -60,17 +62,17 @@ const Applicant = z
       .string()
       .optional()
       .default("N/A"),
-    "Why do you want to be part of the Winter projects?": z
+    "Why do you want to be part of the Summer projects?": z
       .string()
       .optional()
       .default("N/A"),
     "Are you able to attend the project sessions in person?": z.string().optional().default("N/A"),
-    "What is your rough weekly availability between June 20 - July 18": z.string().optional().default("N/A"),
+    "What is your rough weekly availability between January 16th, 2027 and February 20th, 2027?": z.string().optional().default("N/A"),
     "Anything else that you'd like us to know?": z
       .string()
       .optional()
       .default("N/A"),
-    "(Intermediate)Interest in moving onto the Client Projects": z
+    "Would you be interested in moving onto the Client Projects from the January 10th, 2027 - February, 20th 2027?": z
       .string()
       .optional()
       .default("N/A"),
@@ -78,7 +80,7 @@ const Applicant = z
   .transform((applicant) => ({
     timestamp: applicant.Timestamp,
     name: applicant["Full Name"],
-    preferredName: applicant["Preferred name (if applicable)"],
+    preferredName: applicant["Preferred Name (if applicable)"],
     pronouns: applicant.Pronouns,
     email: applicant["Email Address"],
     studentNumber: applicant["UWA Student Number"],
@@ -95,14 +97,16 @@ const Applicant = z
     yearOfStudy: applicant["What year of your degree are you currently in?"],
     techExp:
       applicant["Please briefly describe your technical experience, in words"],
-    reason: applicant["Why do you want to be part of the Winter projects?"],
+    reason: applicant["Why do you want to be part of the Summer projects?"],
     preference:
       applicant[
         "Which projects are the best match for your current skill level?"
       ],
     canAttend: applicant["Are you able to attend the project sessions in person?"],
-    weekly: applicant["What is your rough weekly availability between June 20 - July 18"],
+    weekly: applicant["What is your rough weekly availability between January 16th, 2027 and February 20th, 2027?"],
     anythingElse: applicant["Anything else that you'd like us to know?"],
+    intermediateEoi:
+      applicant["Would you be interested in moving onto the Client Projects from the January 10th, 2027 - February, 20th 2027?"],
   }));
 
 const Applicants = z.array(Applicant);
@@ -242,6 +246,11 @@ projectConfig.projects.forEach((project) => {
   projectBlocks.push(paragraph(""));
 });
 
+projectBlocks.push(heading_2("Introduce the beginner projects"));
+projectConfig.beginnerProjectInfo.forEach((info) =>
+  projectBlocks.push(bullet(info)),
+);
+
 const createRemainingBlocks = (): BlockObjectRequest[] => {
   return [
     {
@@ -288,33 +297,37 @@ const createRemainingBlocks = (): BlockObjectRequest[] => {
 
     divider(),
     heading_2("Introduce the projects"),
-    paragraph("Electrifying Everything WA Website", { bold: true }),
+    paragraph("Bloom Room Booking System", { bold: true }),
     paragraph(
-      "Problem: The current website does not have a backend and is overall pretty static. It could benefit from having its data ingested from the RenewEconomy website. Because of the lack of backend, the process of updating the frontend visuals could be tedious.",
+      "Problem: Bloom, an NFP that runs workshops and facilitates coworking spaces for young entrepreneurs don’t have a room booking site that fits their purposes. They currently use a system made by spacecubed that has features they don’t need and requires a separate account/login.",
     ),
     paragraph(
-      "Overview: The revamped website would be more robust with a backend and optimised with streamlined data ingestion. The visuals of the page would also look more responsive and standardised.",
+      "Overview:  We will be creating a room booking system for the Bloom coworking space in St Catherine’s college. The system will need to allow users to enter their name and email to book a room. They will be able to reschedule their booking via an email link they will be sent after the booking is made. We are aiming to integrate the system with google calendar and possibly notion. This project may be more backend heavy and will include working with email services and google calendar integration.",
     ),
     bullet(
       "Tech stack:",
       { bold: true },
-      bulletChildren(["React", "Next.js", "Tailwind", "Tendenci", "PostgreSQL", "Vercel"]),
+      bulletChildren(["React", "Next.js", "Django"]),
     ),
     paragraph(""),
 
-    paragraph("UWA Agronomy Club Website", { bold: true }),
+    paragraph("UWA Game Development Club Website", { bold: true }),
     paragraph(
-      "Problem: The current website is just a prototype with minimal functionalities and has certain bugs upon logging in. There are no hierarchical admin features, making handover an issue to less tech-savvy students. There are also no study materials up at the moment for students to refer.",
+      "Problem: The UWA Game Dev club is a new club that doesn’t have a website yet! They need a way for people to find out about the club, and want to showcase their members creations.",
     ),
     paragraph(
-      "Overview: The administrative functionality alongside deployment runbooks allow agricultural students from the club to better manage the website as it is an education-first agricultural community by students for students. The Study Materials Library tab would then serve as a platform for students to gain relevant knowledge.",
+      "Overview: We will be creating a website to provide information about the club, let members know about their upcoming events, and showcase the games and art that members create in the game jam events that the club runs. We hope to integrate with itch.io so that visitors can play the games via our site, and allow playback of video/audio for the art showcase. Main project focuses will be making a cool and creative frontend and itch.io, video and audio integration.",
     ),
     bullet(
       "Tech stack:",
       { bold: true },
-      bulletChildren(["React", "Next.js", "TypeScript", "Tailwind", "Django", "Firestore", "Firebase", "Google Cloud"]),
+      bulletChildren(["React", "Next.js", "Django", "Itch.io API"]),
     ),
 
+    heading_2("Introduce the beginner project"),
+    bullet(
+      "A guided project where volunteers create a personal portfolio website to showcase their skills. This project is ideal for beginners who want to learn web development basics and gain practical experience.",
+    ),
     heading_2("Introduce the intermediate project"),
     bullet(
       "A guided project where volunteers learn about the frameworks used in the client projects, i.e. next.js (with react) and Django. This project is ideal for those who have completed Agile Web dev and want to gain experience with industry standard technologies.",
@@ -325,6 +338,7 @@ const createRemainingBlocks = (): BlockObjectRequest[] => {
       { italic: true },
     ),
     paragraph("PROJECT PREFERENCE!!!", { bold: true, underline: true }),
+    todo("Beginner Project", { bold: true }),
     todo("Client Project", { bold: true }),
     todo("Frontend", { bold: true }),
     todo("Backend", { bold: true }),
@@ -655,344 +669,340 @@ const createPages2 = async (pagesToCreate: TApplicants) => {
             "Student Number": {
               rich_text: [{ text: { content: applicant.studentNumber } }],
             },
+            "Membership": {
+              rich_text: [{ text: { content: applicant.membership } } ],
+            },
             "Study Level": {
               rich_text: [{ text: { content: applicant.degreeLevel } }],
             },
             "Year of Study": {
               rich_text: [{ text: { content: applicant.yearOfStudy } }],
             },
+            "Intermediate EOI": {
+              rich_text: [{ text: { content: applicant.intermediateEoi } }],
+            },
           },
           children: [
             // First 100 blocks
             paragraph(
-              "Please ensure you make the candidate feel welcome and comfortable - interviews can be daunting!\n\nOur goal is to not only understand a candidate's technical abilities, but also to gain a sense about their motivations, work ethic, ability to work as part of a team, and the chance that they will flake on us.",
+              "Please ensure you make the candidate feel welcome and comfortable - interviews can be daunting!\nOur goal is to not only understand a candidate's technical abilities, but also to gain a sense about their motivations, work ethic, ability to work as part of a team, and the chance that they will flake on us.",
             ),
-            heading_2("Before the interview"),
-            paragraph(
-              "If the candidate is applying for intermediate or client projects, check their GitHub repos and contributions. Look for evidence of personal projects, learning, and commitment to projects. \n",
-              { italic: true },
-            ),
-            paragraph("Commit history/contributions: \n", { bold: true }),
-            paragraph(`Applicant GitHub: ${applicant.github}`, { bold: true }),
-            paragraph("Public repos/personal projects:\n", { bold: true }),
+
+            toggleHeading_2(
+              "Before the interview", [
+                paragraph("If the candidate is applying for intermediate or client projects, check their GitHub repos and contributions. Look for evidence of personal projects, learning, and commitment to projects. \n", { italic: true },),
+                paragraph("Commit history/contributions: \n", { bold: true }),
+                paragraph(`Applicant GitHub: ${applicant.github}`, { bold: true }),
+                paragraph("Public repos/personal projects:\n", { bold: true }),
+                ] as Heading2Children),
+
+            divider(),
+
+            toggleHeading_2(
+              "Application form",[
+                paragraph("Describe your technical experience", {underline: true,}),
+                paragraph(`${applicant.techExp.slice(0, 1999)}`),
+                paragraph(`${applicant.techExp.slice(1999)}`),
+                paragraph(`Why do you want to be part of the Winter project (${applicant.preference}) ?`,{ underline: true },),
+                paragraph(`${applicant.reason.slice(0, 1999)}`),
+                paragraph(`${applicant.reason.slice(1999)}`),
+                paragraph("Anything else that you'd like us to know?", {underline: true,}),
+                paragraph(`${applicant.anythingElse}\n`)
+              ] as Heading2Children ),
+
             divider(),
 
             heading_2("During the interview:\n"),
             heading_2("Committee Introduction"),
-            paragraph(
-              "Committee members should introduce themselves and their role in CFC.\n",
-            ),
+            paragraph("Committee members should introduce themselves and their role in CFC.\n",),
 
             divider(),
 
-            heading_2("Candidate Introduction"),
-            paragraph(
-              `The applicant is doing ${applicant.degreeLevel}, ${applicant.yearOfStudy}`,
-              { bold: true },
-            ),
-            
-            paragraph(
-              "• The candidate should give a brief introduction about themselves.\n\n" + 
-              "• How did their semester go?\n\n" + 
-              "• Have they participated in any uni events this year?\n\n" + 
-              "• Are they involved with any other clubs?\n\n" +
-              "•Have they been involved with CFC before (events or other projects)?\n\n" +
-              "• Other club participation: \n"
-            ),
-
+            toggleHeading_2("Candidate Introduction", [
+                paragraph(
+                `The applicant is doing ${applicant.degreeLevel}, ${applicant.yearOfStudy}`,{ bold: true },),
+                paragraph(
+                  "• The candidate should give a brief introduction about themselves.\n\n" + 
+                  "• How did their semester go?\n\n" + 
+                  "• Have they participated in any uni events this year?\n\n" + 
+                  "• Are they involved with any other clubs?\n\n" +
+                  "• Have they been involved with CFC before (events or other projects)?\n\n" +
+                  "• Other club participation: \n"),
+                ] as Heading2Children),
+              
             divider(),
 
-            heading_2("Application form"),
-            paragraph("Describe your technical experience", {
-              underline: true,
-            }),
-            paragraph(`${applicant.techExp.slice(0, 1999)}`),
-            paragraph(`${applicant.techExp.slice(1999)}`),
-            paragraph(
-              `Why do you want to be part of the Summer project (${applicant.preference}) ?`,
-              { underline: true },
-            ),
-            paragraph(`${applicant.reason.slice(0, 1999)}`),
-            paragraph(`${applicant.reason.slice(1999)}`),
-            paragraph("Anything else that you'd like us to know?", {
-              underline: true,
-            }),
-            paragraph(`${applicant.anythingElse}\n`),
-
-            divider(),
-
-            heading_2("Experience and Technical Questions"),
-            paragraph(
+            toggleHeading_2("Experience and Technical Questions", [
+              paragraph(
               "Try to identify skills in technologies beneficial to CFC projects, i.e. HTML, CSS, JS, React.js, typescript, django, next.js. Skills with other frontend and backend frameworks are also applicable.\nAsk about personal projects and the technologies the candidate used to develop these. Ask about the challenges they experienced in developing these projects and how they overcame them. This shows critical thinking and depth of understanding.\n",
-              { italic: true },
-            ),
+              { italic: true },),
 
-            heading_2("Experience questions"),
-            paragraph("1. Tell me about your technical experience?"),
-            paragraph(
-              "2. Are you familiar with web technologies, elaborate on your experience with them.",
-            ),
-            paragraph(
-              "3. Are you familiar with git and github, or other version control software? Describe a time you used version control to aid the development of a project.",
-            ),
-            paragraph(
-              "4. Describe a personal project you’ve worked on. Explain your approach, including any technical challenges you faced and how you solved them. Highlight any details that showcase your skills.\n",
-            ),
-            {
-              object: "block",
-              paragraph: {
-                rich_text: [
-                  {
-                    text: {
-                      content:
-                        "Optional personality/motivation check - gauge enthusiasm and general tech knowledge: ",
+              heading_2("Experience questions"),
+              paragraph("1. Tell me about your technical experience?"),
+              paragraph(
+                "2. Are you familiar with web technologies, elaborate on your experience with them.",
+              ),
+              paragraph(
+                "3. Are you familiar with git and github, or other version control software? Describe a time you used version control to aid the development of a project.",
+              ),
+              paragraph(
+                "4. Describe a personal project you’ve worked on. Explain your approach, including any technical challenges you faced and how you solved them. Highlight any details that showcase your skills.\n",
+              ),
+              {
+                object: "block",
+                paragraph: {
+                  rich_text: [
+                    {
+                      text: {
+                        content:
+                          "Optional personality/motivation check - gauge enthusiasm and general tech knowledge: ",
+                      },
+                      annotations: { bold: true },
                     },
-                    annotations: { bold: true },
-                  },
-                  {
-                    text: {
-                      content:
-                        "What would your next personal project be? Given the opportunity are there any particular technologies or niches that you would like to explore?\n",
+                    {
+                      text: {
+                        content:
+                          "What would your next personal project be? Given the opportunity are there any particular technologies or niches that you would like to explore?\n",
+                      },
                     },
-                  },
-                ],
+                  ],
+                },
               },
-            },
+
+              divider(),
+
+              heading_2("Technical questions"),
+              paragraph(
+                "Pick a question relevant to a technology that the applicant has mentioned. Make sure the applicant knows what they are talking about!\n",
+                { italic: true },
+              ),
+              paragraph(
+                "Note: If the candidate is interviewing for client projects but doesn’t know any frameworks you can ask intermediate questions, just make a note that you did this in the end section.\n",
+                { italic: true },
+              ),
+
+              paragraph(
+                `Applicant preference: ${applicant.preference.toLowerCase()}\n`,
+                { underline: true, italic: true },
+              ),
+              toggle(
+                "Beginner icebreaker questions (pick 1-2)",
+                toggleChildren([
+                  "What is your favourite programming language you have learnt so far and why?",
+                  "What steps do you take to solve problems in your code?",
+                  "What is your preferred IDE/editor and why?",
+                  "What is your favourite operating system and why?",
+                ]),
+              ),
+              paragraph("Intermediate (pick 2-3)\n", { bold: true }),
+              paragraph("General\n", { bold: true }),
+              toggle(
+                "What is the DOM and how is it used?",
+                toggleChildren([
+                  "Answer: the DOM (Document Object Model) represents the document as a tree where each node corresponds to a part of the document. It allows scripts to dynamically access and update the content, structure, and style of documents.",
+                ]),
+              ),
+              toggle(
+                "What are HTML, CSS and JS? How do they work together in web development?",
+                toggleChildren([
+                  "Answer: HTML provides the structure, CSS styles the appearance, and JavaScript adds interactivity to web pages.",
+                ]),
+              ),
+              toggle(
+                "Name at least 3 HTTP request methods. Explain what each one does and when we would use it.",
+                toggleChildren([
+                  "Answer:GET requests a representation of the specified resource.POST submits an entity to a resource, often causing state change or side effects on server. PUT replaces current representations of the resource with the request content. PATCH applies partial modifications to a resource. also: DELETE CONNECT OPTIONS TRACE",
+                ]),
+              ),
+              toggle(
+                "Can you explain the difference between client-side and server-side programming?",
+                toggleChildren([
+                  "Answer: Client-side code runs in the browser (e.g., JavaScript), while server-side code runs on the server, handling requests and - sending data to the client (e.g., Python, Node.js).",
+                ]),
+              ),
+              paragraph("CSS", { bold: true }),
+              toggle(
+                "What is responsive design and why is it important? How would you create a responsive page without any frameworks?",
+                toggleChildren([
+                  "Answer: Responsive design makes websites adapt to different screen sizes and devices. It can be implemented with CSS flexbox, grid, or media queries.",
+                ]),
+              ),
+              toggle(
+                "What is the difference between padding and margin in CSS? Explain with reference to the box model.",
+                toggleChildren([
+                  "Answer: Padding adds space inside an element, between its content and border. Margin adds space outside an element, creating gaps between elements.",
+                ]),
+              ),
+
+              paragraph("JavaScript", { bold: true }),
+              toggle(
+                "What are JavaScript promises? How do they differ from callbacks?",
+                toggleChildren([
+                  "Answer: Promises represent the eventual completion/failure of an asynchronous operation and its resulting value. Callbacks are functions given to another function so that it can be called later.",
+                ]),
+              ),
+              toggle(
+                "What are closures in JavaScript?",
+                toggleChildren([
+                  "Answer: A closure is a feature in JS where an inner function has access to its own scope, the outer function's scope, and the global scope. It allows the inner function to access variables from the outer function even after the outer function has finished executing.",
+                ]),
+              ),
+              toggle(
+                "What is the difference between == and ===? When would we use each one?",
+                toggleChildren([
+                  "Answer: == checks for value equality, allowing type conversion, while === checks for both value and type equality without conversion.",
+                ]),
+              ),
+
+              paragraph("Version control", { bold: true }),
+              toggle(
+                "Demonstrate (or describe) how to commit and push to Github. Describe what each step is doing and why you need to do it.",
+                toggleChildren([
+                  "Answer: interviewer can judge if it is done correctly :)",
+                ]),
+              ),
+              toggle(
+                "What is the difference between git and GitHub?",
+                toggleChildren([
+                  "Answer: Git is a distributed version control system for tracking changes in source code during software development. GitHub is a web-based Git repository hosting service.",
+                ]),
+              ),
+              toggle(
+                "What is the difference between `git merge` and `git rebase`?",
+                toggleChildren([
+                  "Answer: Merge: combine changes from one branch into another. Includes merge commit with two parent branches. Rebase moves/combines a sequence of commits to a new base commit. In simple words, it moves the entire feature branch to the tip of the main branch.",
+                ]),
+              ),
+              paragraph("Client projects (pick 2-3)", { bold: true }),
+
+              paragraph("React/next.js", { bold: true }),
+              toggle(
+                "What is next.js and how is it different to react?",
+                toggleChildren([
+                  "Answer: NextJS is a framework of React that enhances its SSR, automatic code splitting, and simplified routing, while React is a frontend JS library that is used for developing interactive user interfaces and building UI components.",
+                ]),
+              ),
+              toggle(
+                "What are components in react and why are they important?",
+                toggleChildren([
+                  "Answer: Components are reusable, independent code blocks (a function or a class) that define the structure and behavior of the UI.",
+                ]),
+              ),
+              toggle(
+                "What are hooks in react?",
+                toggleChildren([
+                  "Answer: Hooks are special functions in react that let you use state, lifecycles, methods and other react features in functional components. Allow cleaner code and re-use of logic between components.",
+                ]),
+              ),
+              toggle(
+                "What is useEffect in React and what is the role of its dependency array?",
+                toggleChildren([
+                  "Answer: useEffect is a hook that allows functional components to perform side effects e.g. fetching data, setting up subscriptions, or directly manipulating the DOM. It runs after the component renders, ensuring the UI is updated first. Dependency array controls when the effect runs. [] runs once after component mounts, [dep1, dep2] runs only when a dependency changes, if array is omitted, it runs after every render.",
+                ]),
+              ),
+              toggle(
+                "Can you explain what the Virtual DOM is and how React uses it?",
+                toggleChildren([
+                  "Answer: Virtual DOM is a lightweight, in memory representation of the DOM. React updates the virtual DOM, diffs this with the virtual DOM before updates, and identifies the minimum changes needed to the real DOM. This enables faster UI updates.",
+                ]),
+              ),
+              toggle(
+                "Explain how we could implement authentication with next.js",
+                toggleChildren(["Answer: OAuth, JWT etc…"]),
+              ),
+
+              paragraph("TypeScript", { bold: true }),
+              toggle(
+                "Differentiate between the .ts and .tsx file extensions given to a TypeScript file",
+                toggleChildren([
+                  "Answer: .ts files contain pure ts code. .tsx files contain JSX code and are mainly used to build react components.",
+                ]),
+              ),
+              toggle(
+                "Can we specify the optional properties to TS objects? If yes, explain how.",
+                toggleChildren([
+                  "Answer: Yes, we can specify an optional property with a ? after the property name when creating an object.",
+                ]),
+              ),
+              toggle(
+                "What are the advantages of using TypeScript over JavaScript?",
+                toggleChildren([
+                  "Answer: Can compile down to js code that is runnable on every browser, allows us to declare strongly/statically typed variables, better intellisense and code completion, can throw errors at compile time (vs runtime for js).",
+                ]),
+              ),
+              toggle(
+                "Explain either Rest parameters or object destructuring (TS/JS but more advanced)",
+                toggleChildren([
+                  "Answer:",
+                  "Rest parameters: enable functions to handle an unlimited number of arguments by grouping them into an array. Defined using ... and must be the last parameter.",
+                  "Object destructuring: Special syntax to extract properties from an object and assign them to variables or parameters. e.g. { name, age } = person",
+                ]),
+              ),
+
+              paragraph("Django", { bold: true }),
+              toggle(
+                "What are Django URLs?",
+                toggleChildren([
+                  "Answer: URLs define the routing of a web application. The urls.py file maps URL patterns to specific view functions or classes.",
+                ]),
+              ),
+              toggle(
+                "What are Django views?",
+                toggleChildren([
+                  "Answer: A view is a function/class that takes a web request and returns a response. Acts as a connection between models and templates.",
+                ]),
+              ),
+              toggle(
+                "What are Django models?",
+                toggleChildren([
+                  "Answer: Django models define the structure and behaviour of data. Each model typically maps to a single db table. It manages fields, relationships and constraints for storing and managing data.",
+                ]),
+              ),
+              toggle(
+                "What is the difference between `null=True` and `blank=True` in Django models?",
+                toggleChildren([
+                  "Answer: null=True is db level - allows storing NULL in the column. blank=True is validation level - allows empty form fields.",
+                ]),
+              ),
+              toggle(
+                "What do the commands `python manage.py makemigrations` and `python manage.py migrate` do?",
+                toggleChildren([
+                  "Answer: makemigrations creates new migration files based on the changes you have made to your models. migrate applies those migrations to the database, updating its schema.",
+                ]),
+              ),
+            ] as Heading2Children ),
 
             divider(),
 
-            heading_2("Technical questions"),
-            paragraph(
-              "Pick a question relevant to a technology that the applicant has mentioned. Make sure the applicant knows what they are talking about!\n",
-              { italic: true },
-            ),
-            paragraph(
-              "Note: If the candidate is interviewing for client projects but doesn’t know any frameworks you can ask intermediate questions, just make a note that you did this in the end section.\n",
-              { italic: true },
-            ),
-
-            paragraph(
-              `Applicant preference: ${applicant.preference.toLowerCase()}\n`,
-              { underline: true, italic: true },
-            ),
-            toggle(
-              "Beginner icebreaker questions (pick 1-2)",
-              toggleChildren([
-                "What is your favourite programming language you have learnt so far and why?",
-                "What steps do you take to solve problems in your code?",
-                "What is your preferred IDE/editor and why?",
-                "What is your favourite operating system and why?",
-              ]),
-            ),
-            paragraph("Intermediate (pick 2-3)\n", { bold: true }),
-            paragraph("General\n", { bold: true }),
-            toggle(
-              "What is the DOM and how is it used?",
-              toggleChildren([
-                "Answer: the DOM (Document Object Model) represents the document as a tree where each node corresponds to a part of the document. It allows scripts to dynamically access and update the content, structure, and style of documents.",
-              ]),
-            ),
-            toggle(
-              "What are HTML, CSS and JS? How do they work together in web development?",
-              toggleChildren([
-                "Answer: HTML provides the structure, CSS styles the appearance, and JavaScript adds interactivity to web pages.",
-              ]),
-            ),
-            toggle(
-              "Name at least 3 HTTP request methods. Explain what each one does and when we would use it.",
-              toggleChildren([
-                "Answer:GET requests a representation of the specified resource.POST submits an entity to a resource, often causing state change or side effects on server. PUT replaces current representations of the resource with the request content. PATCH applies partial modifications to a resource. also: DELETE CONNECT OPTIONS TRACE",
-              ]),
-            ),
-            toggle(
-              "Can you explain the difference between client-side and server-side programming?",
-              toggleChildren([
-                "Answer: Client-side code runs in the browser (e.g., JavaScript), while server-side code runs on the server, handling requests and - sending data to the client (e.g., Python, Node.js).",
-              ]),
-            ),
-            paragraph("CSS", { bold: true }),
-            toggle(
-              "What is responsive design and why is it important? How would you create a responsive page without any frameworks?",
-              toggleChildren([
-                "Answer: Responsive design makes websites adapt to different screen sizes and devices. It can be implemented with CSS flexbox, grid, or media queries.",
-              ]),
-            ),
-            toggle(
-              "What is the difference between padding and margin in CSS? Explain with reference to the box model.",
-              toggleChildren([
-                "Answer: Padding adds space inside an element, between its content and border. Margin adds space outside an element, creating gaps between elements.",
-              ]),
-            ),
-
-            paragraph("JavaScript", { bold: true }),
-            toggle(
-              "What are JavaScript promises? How do they differ from callbacks?",
-              toggleChildren([
-                "Answer: Promises represent the eventual completion/failure of an asynchronous operation and its resulting value. Callbacks are functions given to another function so that it can be called later.",
-              ]),
-            ),
-            toggle(
-              "What are closures in JavaScript?",
-              toggleChildren([
-                "Answer: A closure is a feature in JS where an inner function has access to its own scope, the outer function's scope, and the global scope. It allows the inner function to access variables from the outer function even after the outer function has finished executing.",
-              ]),
-            ),
-            toggle(
-              "What is the difference between == and ===? When would we use each one?",
-              toggleChildren([
-                "Answer: == checks for value equality, allowing type conversion, while === checks for both value and type equality without conversion.",
-              ]),
-            ),
-
-            paragraph("Version control", { bold: true }),
-            toggle(
-              "Demonstrate (or describe) how to commit and push to Github. Describe what each step is doing and why you need to do it.",
-              toggleChildren([
-                "Answer: interviewer can judge if it is done correctly :)",
-              ]),
-            ),
-            toggle(
-              "What is the difference between git and GitHub?",
-              toggleChildren([
-                "Answer: Git is a distributed version control system for tracking changes in source code during software development. GitHub is a web-based Git repository hosting service.",
-              ]),
-            ),
-            toggle(
-              "What is the difference between `git merge` and `git rebase`?",
-              toggleChildren([
-                "Answer: Merge: combine changes from one branch into another. Includes merge commit with two parent branches. Rebase moves/combines a sequence of commits to a new base commit. In simple words, it moves the entire feature branch to the tip of the main branch.",
-              ]),
-            ),
-            paragraph("Client projects (pick 2-3)", { bold: true }),
-
-            paragraph("React/next.js", { bold: true }),
-            toggle(
-              "What is next.js and how is it different to react?",
-              toggleChildren([
-                "Answer: NextJS is a framework of React that enhances its SSR, automatic code splitting, and simplified routing, while React is a frontend JS library that is used for developing interactive user interfaces and building UI components.",
-              ]),
-            ),
-            toggle(
-              "What are components in react and why are they important?",
-              toggleChildren([
-                "Answer: Components are reusable, independent code blocks (a function or a class) that define the structure and behavior of the UI.",
-              ]),
-            ),
-            toggle(
-              "What are hooks in react?",
-              toggleChildren([
-                "Answer: Hooks are special functions in react that let you use state, lifecycles, methods and other react features in functional components. Allow cleaner code and re-use of logic between components.",
-              ]),
-            ),
-            toggle(
-              "What is useEffect in React and what is the role of its dependency array?",
-              toggleChildren([
-                "Answer: useEffect is a hook that allows functional components to perform side effects e.g. fetching data, setting up subscriptions, or directly manipulating the DOM. It runs after the component renders, ensuring the UI is updated first. Dependency array controls when the effect runs. [] runs once after component mounts, [dep1, dep2] runs only when a dependency changes, if array is omitted, it runs after every render.",
-              ]),
-            ),
-            toggle(
-              "Can you explain what the Virtual DOM is and how React uses it?",
-              toggleChildren([
-                "Answer: Virtual DOM is a lightweight, in memory representation of the DOM. React updates the virtual DOM, diffs this with the virtual DOM before updates, and identifies the minimum changes needed to the real DOM. This enables faster UI updates.",
-              ]),
-            ),
-            toggle(
-              "Explain how we could implement authentication with next.js",
-              toggleChildren(["Answer: OAuth, JWT etc…"]),
-            ),
-
-            paragraph("TypeScript", { bold: true }),
-            toggle(
-              "Differentiate between the .ts and .tsx file extensions given to a TypeScript file",
-              toggleChildren([
-                "Answer: .ts files contain pure ts code. .tsx files contain JSX code and are mainly used to build react components.",
-              ]),
-            ),
-            toggle(
-              "Can we specify the optional properties to TS objects? If yes, explain how.",
-              toggleChildren([
-                "Answer: Yes, we can specify an optional property with a ? after the property name when creating an object.",
-              ]),
-            ),
-            toggle(
-              "What are the advantages of using TypeScript over JavaScript?",
-              toggleChildren([
-                "Answer: Can compile down to js code that is runnable on every browser, allows us to declare strongly/statically typed variables, better intellisense and code completion, can throw errors at compile time (vs runtime for js).",
-              ]),
-            ),
-            toggle(
-              "Explain either Rest parameters or object destructuring (TS/JS but more advanced)",
-              toggleChildren([
-                "Answer:",
-                "Rest parameters: enable functions to handle an unlimited number of arguments by grouping them into an array. Defined using ... and must be the last parameter.",
-                "Object destructuring: Special syntax to extract properties from an object and assign them to variables or parameters. e.g. { name, age } = person",
-              ]),
-            ),
-
-            paragraph("Django", { bold: true }),
-            toggle(
-              "What are Django URLs?",
-              toggleChildren([
-                "Answer: URLs define the routing of a web application. The urls.py file maps URL patterns to specific view functions or classes.",
-              ]),
-            ),
-            toggle(
-              "What are Django views?",
-              toggleChildren([
-                "Answer: A view is a function/class that takes a web request and returns a response. Acts as a connection between models and templates.",
-              ]),
-            ),
-            toggle(
-              "What are Django models?",
-              toggleChildren([
-                "Answer: Django models define the structure and behaviour of data. Each model typically maps to a single db table. It manages fields, relationships and constraints for storing and managing data.",
-              ]),
-            ),
-            toggle(
-              "What is the difference between `null=True` and `blank=True` in Django models?",
-              toggleChildren([
-                "Answer: null=True is db level - allows storing NULL in the column. blank=True is validation level - allows empty form fields.",
-              ]),
-            ),
-            toggle(
-              "What do the commands `python manage.py makemigrations` and `python manage.py migrate` do?",
-              toggleChildren([
-                "Answer: makemigrations creates new migration files based on the changes you have made to your models. migrate applies those migrations to the database, updating its schema.",
-              ]),
-            ),
-
-            divider(),
-
-            heading_2("Teamwork questions"),
-            paragraph(
+            toggleHeading_2("Teamwork questions",[
+              paragraph(
               "Try to gauge how effective the applicant will be when working in a team. It can be useful to relate these questions to earlier group projects the applicant may have mentioned.\n",
-              { italic: true },
-            ),
+              { italic: true },),
+              paragraph("Questions (do not need to ask all):", { bold: true }),
+              paragraph(
+                "1. Describe a time when you had to work closely with others to complete a project. What was your role, and how did you contribute to the team’s success?",
+              ),
+              paragraph(
+                "2. What challenges did you face when working in the group environment, and how did you handle them?",
+                { bold: true },
+              ),
+              paragraph(
+                "3. Describe a time when you disagreed with your colleague and how would you resolve the situation? How did you come to a compromise?\n",
+              ),
 
-            paragraph("Questions (do not need to ask all):", { bold: true }),
-            paragraph(
-              "1. Describe a time when you had to work closely with others to complete a project. What was your role, and how did you contribute to the team’s success?",
-            ),
-            paragraph(
-              "2. What challenges did you face when working in the group environment, and how did you handle them?",
-              { bold: true },
-            ),
-            paragraph(
-              "3. Describe a time when you disagreed with your colleague and how would you resolve the situation? How did you come to a compromise?\n",
-            ),
+              paragraph("Bonus Questions:", { bold: true }),
+              paragraph(
+                "4. What is most important to you when working in a team?",
+              ),
+              paragraph(
+                "5. Have you held a job/internship that required you to work in a larger team? What strategies did you use to work effectively in this team?",
+              ),] as Heading2Children),
 
-            paragraph("Bonus Questions:", { bold: true }),
-            paragraph(
-              "4. What is most important to you when working in a team?",
-            ),
-            paragraph(
-              "5. Have you held a job/internship that required you to work in a larger team? What strategies did you use to work effectively in this team?",
-            ),
 
             divider(),
 
-            heading_2("Availability"),
-            {
+            toggleHeading_2("Availability", [
+              {
               object: "block",
               paragraph: {
                 rich_text: [
@@ -1037,16 +1047,19 @@ const createPages2 = async (pagesToCreate: TApplicants) => {
             paragraph(
               "2. How would you manage balancing your commitments if you are accepted into our program? ",
             ),
+            ] as Heading2Children),
+        
             divider(),
 
-            heading_2("Personality and Motivation"),
-            paragraph(
+            toggleHeading_2("Personality and Motivation",[
+              paragraph(
               "Find out what motivated the applicant to apply for the projects and judge whether you think they will be committed. People just here for the resume will be more likely to flake.\nJudge if you think the applicant has a personality that will fit well within a team. Will they be eager to get to know and work with the other team members? Will they be engaged and continue to contribute throughout the project period?\n",
               { italic: true },
-            ),
-            paragraph("Questions:", { bold: true }),
-            paragraph("1. Why do you want to be a part of the project?"),
-            paragraph(`   ${applicant.reason}`, { bold: true }),
+              ),
+              paragraph("Questions:", { bold: true }),
+              paragraph("1. Why do you want to be a part of the project?"),
+              paragraph(`   ${applicant.reason}`, { bold: true }),
+            ] as Heading2Children),
           ],
         });
       }),
